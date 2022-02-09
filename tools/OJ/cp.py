@@ -1695,6 +1695,9 @@ class Cp_ext:
         except Exception as e:
             return ''
 
+    def process_name(self, name):
+        return name.replace(' ', '_').replace('(', '_').replace(')', '_')
+
     def create(self,problem , cnt=0, link=False):
         # print(problem)
         try :
@@ -1706,10 +1709,12 @@ class Cp_ext:
             # cprint(dic,'yellow')
             # return
             problem_name = dic['name']
+            problem_name = self.process_name(problem_name)
             try :
                 contest_name = dic['group']
             except :
                 contest_name = 'NULL'
+            contest_name = self.process_name(contest_name)
             url = dic['url']
             problem_timeLimit = 'NULL'
             problem_memoryLimit = 'NULL'
