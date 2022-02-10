@@ -350,7 +350,7 @@ class Cp_my_tester:
 
 
 
-    def test(self,file_name,show=False,debug_run=False):
+    def test(self,file_name,show=False,debug_run=True,release_run=False):
         path = os.getcwd()
         # print(path, file_name)
         pt='-'*20+file_name+'-'*20
@@ -360,7 +360,7 @@ class Cp_my_tester:
         print()
 
         debug_flag = ''
-        if debug_run :
+        if show :
             debug_flag = '-DPAUL -DLOCAL'
 
         case_folder = 'testcases'
@@ -392,7 +392,7 @@ class Cp_my_tester:
                 type = 'py'
         
         if type == 'cpp':
-            if debug_run:
+            if not release_run: 
                 sanitizer = "-Wshadow -Wconversion -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -g"
             else:
                 sanitizer = "-O2 -Wshadow -Wall"
@@ -519,8 +519,7 @@ class Cp_my_tester:
         pt='-'*20+'-'*len(file_name)+'-'*20
         cprint(pt,'magenta')
 
-    def find_files(self,file_name='',show=False,debug_run=False):
-
+    def find_files(self,file_name='',show=False,debug_run=True,release_run=False):
         file_list = []
         # print(file_name)
         supported_ext = ['cpp','py']
@@ -537,7 +536,7 @@ class Cp_my_tester:
         # print(file_list)
         sz = len(file_list)
         if sz == 1:
-            self.test(file_list[0],show,debug_run)
+            self.test(file_list[0],show,debug_run,release_run)
         elif sz > 1:
             no = 1
             cprint("All the available files are given below.\n",'yellow')
@@ -554,7 +553,7 @@ class Cp_my_tester:
                     cprint("Testing operation cancelled.",'red')
                     break
                 elif index < no:
-                    self.test(file_list[index-1],show,debug_run)
+                    self.test(file_list[index-1],show,debug_run,release_run)
                     break
                 else:
                     cprint("You have entered the wrong index.Please try again.",'red')
@@ -2208,14 +2207,18 @@ def cp_manager(msg):
         obj = Cp_my_tester()
         # obj.TLE = 1
         show = False
-        debug_run = False
+        debug_run = True
+        release_run = False
         if '-d' in ar :
             msg = msg.replace('-d','')
             debug_run = True
+        if '--release' in ar :
+            msg = msg.replace('--release','')
+            release_run = True
         if '--show' in ar :
             msg = msg.replace('--show','')
             show = True
-        obj.find_files(msg,show,debug_run)
+        obj.find_files(msg,show,debug_run,release_run)
     elif 'setup' in ar:
         obj = Cp_setup()
         obj.setup()
