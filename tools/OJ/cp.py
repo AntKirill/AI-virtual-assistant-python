@@ -397,7 +397,7 @@ class Cp_my_tester:
             else:
                 sanitizer = "-O2 -Wshadow -Wall"
 
-            cmd = f"g++ {debug_flag} {sanitizer} '{file_name}' -o test.out"
+            cmd = f"g++ -std=c++17 {debug_flag} {sanitizer} '{file_name}' -o sol"
             cprint(f'Compilation: {cmd}', 'yellow')
             t = time.time()
             okk = os.system(cmd)
@@ -446,12 +446,12 @@ class Cp_my_tester:
             with open(os.path.join(file_path,file),'r') as f:
                 value = f.read()
             old_value = value
-            value = self.empty_line_remover(value)
+            # value = self.empty_line_remover(value)
             t = time.time()
             print()
             cprint('  * '+ext[0],'yellow')
             if type == 'cpp':
-                result = self.sub_process(['./test.out'],value)
+                result = self.sub_process(['./sol'],value)
             elif type =='py':
                 result = self.sub_process(['python3',file_name],value)
             else:
@@ -513,8 +513,8 @@ class Cp_my_tester:
         else :
             cprint(" # Failed....",'red')
 
-        if os.path.isfile('test.out'):
-            os.remove('test.out')
+        # if os.path.isfile('sol'):
+            # os.remove('sol')
         print()
         pt='-'*20+'-'*len(file_name)+'-'*20
         cprint(pt,'magenta')
@@ -923,8 +923,9 @@ class Cp_Submit:
         cprint(' '*4+'File name: ','yellow',end='')
         cprint(file_name,'green')
         cprint('-'*len(pt),'magenta')
-        cprint('Enter (y/n) to confirm : ','yellow',attrs=['bold'],end='')
-        x = input()
+        cprint('Enter (y/n) to confirm : y','yellow',attrs=['bold'],end='')
+        # x = input()
+        x = 'y'
         if x.lower() == 'y' or x.lower == 'yes':
             cprint('Submitting...','green')
             submitted = False
@@ -1699,7 +1700,7 @@ class Cp_ext:
             return ''
 
     def process_name(self, name):
-        return name.replace(' ', '_').replace('(', '_').replace(')', '_')
+        return name.replace(' ', '').replace('(', '_').replace(')', '_')
 
     def create(self,problem , cnt=0, link=False):
         # print(problem)
@@ -1852,7 +1853,7 @@ class Cp_ext:
             for file_path,file_name in zip(editor_file_path,editor_file_name):
                 os.chdir(file_path)
                 os.system(editor + ' ' + file_name)
-            os.chdir(base)
+            # os.chdir(base)
 
     def link(self):
 
